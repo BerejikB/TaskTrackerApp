@@ -14,12 +14,13 @@ namespace TaskTrackerApp
 
         static void Main(string[] args)
         {
-            MakeTaskList();
+            Menu();
         }
 
 
         static void Menu()
         {
+            
             Console.WriteLine("Hello, Dave.");
             Console.WriteLine("1) Show tasks");
             Console.WriteLine("2) Add tasks to list");
@@ -32,36 +33,35 @@ namespace TaskTrackerApp
             switch (menuboi)
             {
                 case 1:
-                   // Statement
-                     break;
+                    Console.Clear();
+                    Console.WriteLine("I'm sorry, I can't let you do that Dave.");
+                    Console.ReadKey();
+                    Menu();
+                    break;
                 case 2:
+                    Console.Clear();
                     MakeTaskList();
                      break;
                 case 3:
-                    //Statement
-                     break;
-                case 4:
-                    //Statement
-                     break;
-                default:
+                    Console.Clear();
                     Console.WriteLine("I'm sorry, I can't let you do that Dave.");
+                    Console.ReadKey();
+                    Menu();
+                    break;
+                case 4:
+                    Console.Clear();
+                    Console.WriteLine("I'm sorry, I can't let you do that Dave.");
+                    Console.ReadKey();
+                    Menu();
+                    break;
+                default:
+                    Console.Clear();
+                    Console.WriteLine("I'm sorry, I can't let you do that Dave.");
+                    Console.ReadKey();
+                    Menu();
                     break;
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -69,18 +69,25 @@ namespace TaskTrackerApp
 
 
         {
-            List<string> TaskList = new List<string>();
+            List<List<object>> TaskList = new List<List<object>>();
+            List<object> subList = new List<object>();
+
             Console.WriteLine("Enter a task to add, when finished leave blank and press 'enter'");
 
             string userinput;
+            bool userinputstatus = false;
             do
             {
                 Console.WriteLine("Enter a task");
                 userinput = Console.ReadLine();
+                
 
                 if (!string.IsNullOrEmpty(userinput))
                 {
-                    TaskList.Add(userinput);
+                    subList.Add(userinput);
+                    subList.Add(userinputstatus);
+                    TaskList.Add(subList);
+                    subList = new List<object>();
                 }
 
             } while (!string.IsNullOrEmpty(userinput));
@@ -88,9 +95,9 @@ namespace TaskTrackerApp
 
             Console.Clear();
             Console.WriteLine("List of tasks:");
-            foreach (var item in TaskList)
+            foreach (List<object> task in TaskList)
             {
-                Console.WriteLine(item);
+                Console.WriteLine(task[0]);
             }
             Console.ReadKey();
             MakeFile();
