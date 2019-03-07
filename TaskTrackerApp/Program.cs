@@ -46,49 +46,59 @@ namespace TaskTrackerApp
             Console.WriteLine("3) Complete Task");
             Console.WriteLine("4) Save to file");
             Console.WriteLine("5) Save and Exit");
-            
+            Console.WriteLine("6) Save and Exit, again");
 
-            int menuboi = int.Parse(Console.ReadLine());
 
-            switch (menuboi)
+            try
             {
-                case 1:
-                    Console.Clear();
-                    ListTasks();
+                int menuboi = int.Parse(Console.ReadLine());
 
-                    break;
-                case 2:
-                    Console.Clear();
-                    MakeTaskList();
-                    break;
-                case 3:
-                    Console.Clear();
-                    CompleteTask();
-                    break;
-                case 4:
-                    Console.Clear();
-                    SaveToFile();
-                    Menu();
-                    break;
+                switch (menuboi)
+                {
+                    case 1:
+                        Console.Clear();
+                        ListTasks();
 
-                case 5:
-                    File.WriteAllLines("SavedLists.txt", Unpacker());
-                    Environment.Exit(1);
-                    break;
+                        break;
+                    case 2:
+                        Console.Clear();
+                        MakeTaskList();
+                        break;
+                    case 3:
+                        Console.Clear();
+                        CompleteTask();
+                        break;
+                    case 4:
+                        Console.Clear();
+                        SaveToFile();
+                        Menu();
+                        break;
 
-                case 6:
-                    File.WriteAllLines("SavedLists.txt", Unpacker());
-                    Environment.Exit(1);
-                    break;
+                    case 5:
+                        File.WriteAllLines("SavedLists.txt", Unpacker());
+                        Environment.Exit(1);
+                        break;
 
-                default:
-                    Console.Clear();
-                    Console.WriteLine("I'm sorry, I can't let you do that Dave.");
-                    Console.ReadKey();
-                    Menu();
-                    break;
+                    case 6:
+                        File.WriteAllLines("SavedLists.txt", Unpacker());
+                        Environment.Exit(1);
+                        break;
+
+                    default:
+                        Console.Clear();
+                        Console.WriteLine("I'm sorry, I can't let you do that Dave.");
+                        Console.ReadKey();
+                        Menu();
+                        break;
+                      
+                }
+                Console.ReadKey();
+                
             }
-        }
+            catch (Exception) {Console.WriteLine("I'm sorry, I can't let you do that Dave."); }
+            Menu();
+        }    
+        
 
         public string[] Unpacker()
         {
@@ -121,7 +131,8 @@ namespace TaskTrackerApp
             bool userinputstatus = false;
             do
             {
-                Console.WriteLine("Enter a task");
+                Console.WriteLine("Enter a task, when finished leave blank and press 'enter'");
+                Console.WriteLine();
                 userinput = Console.ReadLine();
 
 
@@ -137,13 +148,7 @@ namespace TaskTrackerApp
 
 
             Console.Clear();
-            Console.WriteLine("List of tasks:");
-            foreach (List<object> task in TaskList)
-            {
-                Console.WriteLine(task[0]);
-            }
-            Console.WriteLine("Press any key to return to menu");
-            Console.ReadKey();
+            
             SaveToFile();
             
 
@@ -194,13 +199,22 @@ namespace TaskTrackerApp
             WritePageTask();
             Console.WriteLine();
             Console.WriteLine("Select a task by number to complete");
-            int userInput = int.Parse(Console.ReadLine()) - 1;
-            TaskList[userInput][1] = true;
-            Console.WriteLine();
-            Console.WriteLine($"Task {userInput + 1} is now marked as complete");
-            Console.WriteLine();
-            Console.WriteLine($"Press any key to return to main menu");
-            Console.ReadKey();
+
+            int userInput;
+            try
+            { 
+                userInput = int.Parse(Console.ReadLine()) - 1;
+                TaskList[userInput][1] = true;
+                Console.WriteLine();
+                Console.WriteLine($"Task {userInput + 1} is now marked as complete");
+                Console.WriteLine();
+                Console.WriteLine($"Press any key to return to main menu");
+                Console.ReadKey();
+            }
+                catch (Exception) { Console.WriteLine("Invalid input, returning to menu");
+                Console.ReadKey();
+                Menu(); 
+            }
 
             SaveToFile();
         }
@@ -211,6 +225,7 @@ namespace TaskTrackerApp
             Console.WriteLine();
 
             Console.ReadKey();
+            Console.WriteLine();
             Console.WriteLine("Press any key to return to main menu");
             Menu();
 
@@ -223,10 +238,10 @@ namespace TaskTrackerApp
             Console.WriteLine(value.PadRight(Console.WindowWidth - 1));
             Console.ResetColor();
         }
-
-
     }
+
 }
+
 
 
 
