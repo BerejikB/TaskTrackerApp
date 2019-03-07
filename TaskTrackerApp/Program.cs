@@ -11,9 +11,9 @@ namespace TaskTrackerApp
 {
     public class Program
     {
-        //Program theThing = new Program;
-        // MakeTaskList() = dothething;
+
         List<List<object>> TaskList = new List<List<object>>();
+
 
         static void Main(string[] args)
         {
@@ -21,7 +21,7 @@ namespace TaskTrackerApp
             Taskboi.FileLoad();
 
         }
-        
+
         public void FileLoad()
         {
             string[] task = File.ReadAllLines("SavedLists.txt");
@@ -29,12 +29,12 @@ namespace TaskTrackerApp
             foreach (string line in task)
             {
 
-                    subList = new List<object>(line.Split(','));
-                    subList[1] = bool.Parse(subList[1].ToString());
-                    TaskList.Add(subList);
-   
+                subList = new List<object>(line.Split(','));
+                subList[1] = bool.Parse(subList[1].ToString());
+                TaskList.Add(subList);
+
             }
-             Menu();
+            Menu();
         }
 
         void Menu()
@@ -55,7 +55,7 @@ namespace TaskTrackerApp
             {
                 case 1:
                     Console.Clear();
-                    ShowTasks();
+                    WritePageTask();
 
                     break;
                 case 2:
@@ -97,13 +97,13 @@ namespace TaskTrackerApp
 
         public string[] Unpacker()
         {
-            
+
             string taskname;
             string taskstatus;
             List<string> unpackedlist = new List<string>();
 
             foreach (List<object> item in TaskList)
-            
+
             {
                 taskname = item[0].ToString();
                 taskstatus = item[1].ToString();
@@ -111,27 +111,13 @@ namespace TaskTrackerApp
             }
 
 
-            return  unpackedlist.ToArray();
+            return unpackedlist.ToArray();
         }
 
-        public void ShowTasks()
-        {
-
-            Console.Clear();
-            Console.WriteLine("List of tasks:");
-            foreach (List<object> task in TaskList)
-            {
-                Console.WriteLine(task[0]);
-            }
-            Console.WriteLine("Press any key to return to menu");
-            Console.ReadKey();
-            Menu();
-        }
-
-        public void  MakeTaskList()
+        public void MakeTaskList()
 
         {
-            
+
             List<object> subList = new List<object>();
 
             Console.WriteLine("Enter a task to add, when finished leave blank and press 'enter'");
@@ -169,21 +155,59 @@ namespace TaskTrackerApp
 
         public void SaveToFile()
         {
-           
+
 
             File.WriteAllLines("SavedLists.txt", Unpacker());
             Console.WriteLine("List Saved!");
             Menu();
-           
+
         }
-        
+
+        public void WritePageTask()
+        {
+
+            Console.Clear();
+           
+            int pageSize = 24;
+            Console.WriteLine("Select Page Number");
+            int pageNum = int.Parse(Console.ReadLine()) - 1;
+            Console.Clear();
+            Console.WriteLine($"Page {pageNum + 1} Selected");
+            int startIndex = pageNum * pageSize;
+
+            for (
+                int counter = startIndex;
+                counter < startIndex + pageSize && counter < TaskList.Count;
+                 ++counter)
+            Console.WriteLine(Unpacker()[counter]);
+            Console.WriteLine();
+            Console.ReadKey();
+            Menu();
+
+        }
+
+        public void WriteGrayLine(string value)
+        {
+            Console.BackgroundColor = ConsoleColor.DarkGray;
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine(value.PadRight(Console.WindowWidth - 1));
+            Console.ResetColor();
+        }
+
+
+    }
+}
+
+
+
+    
 
        
-    }
+
 
        
   
-}
+
     
 
 
