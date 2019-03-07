@@ -43,11 +43,10 @@ namespace TaskTrackerApp
             Console.WriteLine("Hello, Dave.");
             Console.WriteLine("1) Show tasks");
             Console.WriteLine("2) Add tasks to list");
-            Console.WriteLine("3) Begin task");
-            Console.WriteLine("5) Save to file");
-            Console.WriteLine("6) Save and Exit");
-
-
+            Console.WriteLine("3) Complete Task");
+            Console.WriteLine("4) Save to file");
+            Console.WriteLine("5) Save and Exit");
+            
 
             int menuboi = int.Parse(Console.ReadLine());
 
@@ -55,7 +54,7 @@ namespace TaskTrackerApp
             {
                 case 1:
                     Console.Clear();
-                    WritePageTask();
+                    ListTasks();
 
                     break;
                 case 2:
@@ -64,21 +63,17 @@ namespace TaskTrackerApp
                     break;
                 case 3:
                     Console.Clear();
-                    Console.WriteLine("I'm sorry, I can't let you do that Dave.");
-                    Console.ReadKey();
-                    Menu();
+                    CompleteTask();
                     break;
                 case 4:
                     Console.Clear();
-                    Console.WriteLine("I'm sorry, I can't let you do that Dave.");
-                    Console.ReadKey();
+                    SaveToFile();
                     Menu();
                     break;
 
                 case 5:
-                    Console.Clear();
-                    SaveToFile();
-                    Menu();
+                    File.WriteAllLines("SavedLists.txt", Unpacker());
+                    Environment.Exit(1);
                     break;
 
                 case 6:
@@ -149,7 +144,8 @@ namespace TaskTrackerApp
             }
             Console.WriteLine("Press any key to return to menu");
             Console.ReadKey();
-            Menu();
+            SaveToFile();
+            
 
         }
 
@@ -167,21 +163,55 @@ namespace TaskTrackerApp
         {
 
             Console.Clear();
-           
             int pageSize = 24;
             Console.WriteLine("Select Page Number");
             int pageNum = int.Parse(Console.ReadLine()) - 1;
             Console.Clear();
             Console.WriteLine($"Page {pageNum + 1} Selected");
+            Console.WriteLine("============================================================================================================================");
             int startIndex = pageNum * pageSize;
 
             for (
                 int counter = startIndex;
                 counter < startIndex + pageSize && counter < TaskList.Count;
                  ++counter)
-            Console.WriteLine(Unpacker()[counter]);
+            {
+                if 
+                    ( 
+                    !(bool)TaskList[counter][1]
+                    ) { Console.WriteLine($"{counter+1}). {TaskList[counter][0]} "); }
+                    else { WriteGrayLine($"{counter + 1}). {(string)TaskList[counter][0]} "); }
+                
+            }
+
+           
+            
+
+        }
+
+        public void CompleteTask()
+        {
+            WritePageTask();
             Console.WriteLine();
+            Console.WriteLine("Select a task by number to complete");
+            int userInput = int.Parse(Console.ReadLine()) - 1;
+            TaskList[userInput][1] = true;
+            Console.WriteLine();
+            Console.WriteLine($"Task {userInput + 1} is now marked as complete");
+            Console.WriteLine();
+            Console.WriteLine($"Press any key to return to main menu");
             Console.ReadKey();
+
+            SaveToFile();
+        }
+
+        public void ListTasks()
+        {
+            WritePageTask();
+            Console.WriteLine();
+
+            Console.ReadKey();
+            Console.WriteLine("Press any key to return to main menu");
             Menu();
 
         }
